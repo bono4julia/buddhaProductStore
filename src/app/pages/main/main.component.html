@@ -1,0 +1,23 @@
+
+<div class="row">
+  <div class="col-md-10">
+    <h3 id="title">Products list</h3 >
+  </div>
+  <div class="col-md-2">
+      <button (click)="onCreateProduct()" class="btn btn-info">Create product</button>
+  </div>
+</div>
+
+<ul>
+  <li *ngFor="let item of products" class="list-group-item row">
+    <div class="col-md-10" (click)="onSelectProduct(item.id)">
+        Title: {{item.title}}.   
+        Description: {{item.description}}.  
+        Price: {{item.price}}
+    </div>
+    <div class="col-md-2">
+      <button (click)="onDeleteProduct(item.id)" class="btn btn-danger">Delete</button>
+      <button (click)="onEditProduct(item.id)" class="btn btn-primary">Edit</button>
+    </div>
+  </li>
+</ul>
