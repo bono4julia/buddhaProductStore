@@ -11,6 +11,10 @@ export class ProductService {
     localStorage.setItem('dataProducts', JSON.stringify(products));
   }
 
+  isPresentProducts() {
+    return localStorage.getItem('dataProducts');
+  }
+
   getProducts(): Product[] {
     return JSON.parse(localStorage.getItem('dataProducts'));
   }
