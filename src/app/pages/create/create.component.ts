@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Location} from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { imageValidator } from '../../validators/image';
 
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product'
@@ -31,6 +32,7 @@ export class CreateComponent implements OnInit {
       : this.productService.getProductById(id);
 
     this.productForm = this.fb.group({
+      image: [this.product.image, [Validators.required, imageValidator]],
       title: [this.product.title, Validators.required],
       description: [this.product.description, Validators.required],
       price: [this.product.price, Validators.required]

@@ -4,6 +4,15 @@
   <div class="error" 
     *ngIf="form.controls[fieldName].errors.required">
     
-    Field is required
+    {{errorMessages.required}}
+  </div>
+
+  <div *ngIf="!form.controls[fieldName].errors.required">
+    <div class="error" 
+      *ngIf="form.controls[fieldName].errors.image">
+    
+      {{errorMessages.image}}
+    </div>
+
   </div>
 </div>

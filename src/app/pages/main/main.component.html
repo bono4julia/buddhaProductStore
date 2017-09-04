@@ -10,6 +10,9 @@
 
 <ul>
   <li *ngFor="let item of products" class="list-group-item row">
+    <div>
+        <img [src]="item.image">
+    </div>
     <div class="col-md-10" (click)="onSelectProduct(item.id)">
         Title: {{item.title}}.   
         Description: {{item.description}}.  
