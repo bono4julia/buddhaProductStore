@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { imageValidator } from '../../validators/image';
 import { ProductService } from '../../services/product.service';
@@ -12,10 +13,11 @@ import { RoutePaths } from '../../consts/route-paths';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
 
   productForm: FormGroup;
   product: Product;
+  productSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -26,22 +28,34 @@ export class CreateComponent implements OnInit {
   
   ngOnInit() {
     const id = this.activatedRoute.snapshot.queryParams.id;
-    
-    this.product = (id == null)
-      ? new Product()
-      : this.productService.getProductById(id);
 
     this.productForm = this.fb.group({
-      image: [this.product.image, [Validators.required, imageValidator]],
-      title: [this.product.title, Validators.required],
-      description: [this.product.description, Validators.required],
-      price: [this.product.price, Validators.required]
+      image: ['', [Validators.required, imageValidator]],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      price: [0, Validators.required]
     });
 
+    if (id == null) {
+      this.product = new Product();
+    } else {
+      this.productSubscription = 
+        this.productService.products
+          .subscribe((products) => {
+            this.product = this.productService.getProductById(id);
+            this.productForm.setValue({
+              image: this.product.image,
+              title: this.product.title,
+              description: this.product.description,
+              price: this.product.price
+            });
+          });
+    }
+
     this.productForm.valueChanges
-      .subscribe(value => 
-        Object.assign(this.product, value)
-      )
+    .subscribe(value => 
+      Object.assign(this.product, value)
+    );
   }
 
   submit() {
@@ -60,5 +74,11 @@ export class CreateComponent implements OnInit {
 
   goBack() {
     this.router.navigate([RoutePaths.main]);
+  }
+
+  ngOnDestroy() {
+    if(this.productSubscription) {
+      this.productSubscription.unsubscribe();
+    }
   }
 }

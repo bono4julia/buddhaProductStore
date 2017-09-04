@@ -1,5 +1,6 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
@@ -10,9 +11,10 @@ import { RoutePaths } from '../../consts/route-paths';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
   products: Product[];
+  productSubscription: Subscription;
 
   constructor(
     private productService: ProductService,
@@ -20,15 +22,10 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.products = this.productService.getProducts();
-  }
-
-  onSelectProduct(id: number) {
-    this.router.navigate([RoutePaths.details, id]);
-  }
-
-  onCreateProduct() {
-    this.router.navigate([RoutePaths.create], { queryParams: { id: null } });
+    this.productSubscription = this.productService.products
+      .subscribe(products => 
+        this.products = products
+    )
   }
 
   onDeleteProduct(id: number) {
@@ -39,10 +36,21 @@ export class MainComponent implements OnInit {
     }
 
     this.productService.deleteProduct(id);
-    this.products = this.productService.getProducts();
   }
 
   onEditProduct(id: number) {
     this.router.navigate([RoutePaths.create], { queryParams: { id } })
+  }
+
+  onSelectProduct(id: number) {
+    this.router.navigate([RoutePaths.details, id]);
+  }
+
+  onCreateProduct() {
+    this.router.navigate([RoutePaths.create], { queryParams: { id: null } });
+  }
+
+  ngOnDestroy() {
+    this.productSubscription.unsubscribe();
   }
 }
