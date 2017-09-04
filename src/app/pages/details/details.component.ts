@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
+import { RoutePaths } from '../../consts/route-paths';
 
 @Component({
   selector: 'app-details',
@@ -15,7 +16,8 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -23,4 +25,7 @@ export class DetailsComponent implements OnInit {
     this.product = this.productService.getProductById(id);
   }
 
+  goBack() {
+    this.router.navigate([RoutePaths.main]);
+  }
 }

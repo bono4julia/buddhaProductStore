@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
+import { RoutePaths } from '../../consts/route-paths';
 
 @Component({
   selector: 'app-main',
@@ -23,11 +24,11 @@ export class MainComponent implements OnInit {
   }
 
   onSelectProduct(id: number) {
-    this.router.navigate(['/details', id]);
+    this.router.navigate([RoutePaths.details, id]);
   }
 
   onCreateProduct() {
-    this.router.navigate(['/create'], { queryParams: { id: null } });
+    this.router.navigate([RoutePaths.create], { queryParams: { id: null } });
   }
 
   onDeleteProduct(id: number) {
@@ -42,6 +43,6 @@ export class MainComponent implements OnInit {
   }
 
   onEditProduct(id: number) {
-    this.router.navigate(['/create'], { queryParams: { id } })
+    this.router.navigate([RoutePaths.create], { queryParams: { id } })
   }
 }

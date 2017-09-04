@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Location} from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { imageValidator } from '../../validators/image';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { imageValidator } from '../../validators/image';
 import { ProductService } from '../../services/product.service';
-import { Product } from '../../models/product'
+import { Product } from '../../models/product';
+import { RoutePaths } from '../../consts/route-paths';
 
 @Component({
   selector: 'app-create',
@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
-    private location: Location,
+    private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
   
@@ -59,6 +59,6 @@ export class CreateComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate([RoutePaths.main]);
   }
 }
