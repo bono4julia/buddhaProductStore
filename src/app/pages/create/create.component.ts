@@ -18,6 +18,7 @@ export class CreateComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
   product: Product;
   productSubscription: Subscription;
+  formSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -52,10 +53,11 @@ export class CreateComponent implements OnInit, OnDestroy {
           });
     }
 
-    this.productForm.valueChanges
-    .subscribe(value => 
-      Object.assign(this.product, value)
-    );
+    this.formSubscription = 
+      this.productForm.valueChanges
+        .subscribe(value => 
+          Object.assign(this.product, value)
+        );
   }
 
   submit() {
@@ -77,8 +79,10 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.productSubscription) {
+    if (this.productSubscription) {
       this.productSubscription.unsubscribe();
     }
+
+    this.formSubscription.unsubscribe();
   }
 }
