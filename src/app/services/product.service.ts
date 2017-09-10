@@ -7,17 +7,12 @@ import { Product } from '../models/product';
 export class ProductService {
 
   products: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
-  value = this.products.asObservable()
 
   constructor() { }
 
   loadProducts() {
     const products = JSON.parse(localStorage.getItem('dataProducts'));
     this.products.next(products);
-  }
-
-  getProducts() {
-    return this.products.asObservable()
   }
 
   getProductById(id: number): Product {
